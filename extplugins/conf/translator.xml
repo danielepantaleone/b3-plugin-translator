@@ -1,0 +1,46 @@
+<configuration plugin="translator">
+	<settings name="settings">
+		
+		<!-- 
+		
+			defaultSourceLang:		default translation source language code (empty = Auto Detection)
+			defaultTargetlang:		default translation target language code (empty = en)
+			favouriteTranslator: 	Google | Microsoft
+			
+				** NOTE: The translation is issued at first using the favourite specified API.
+					     Is something goes wrong, the translation is issued using the other translator API.
+					     This is just a precaution, built due to Microsoft limitation of 2.000.000 words per month
+					     using a free account. Also the Google API provided with this plugin uses a little trick to get
+					     back the translation since the old Google Translate API have been closed and the new API are not for free.
+					     This trick may not work forever, so we are going to provide a 2nd translation solution.
+			
+			displayTranslatorName:  if True the Translator name will be displayed before the Translated message
+			minSentenceLength:		sentences shorter than this values are not going to be translated with !translast command
+			transTextColorPrefix: 	a Quake3 color code with which to prefix translated text
+			microsoftClientId: 		Microsoft Translator API Client ID
+			microsoftClientSecret: 	Microsoft Translator API Client Secret
+			
+				** NOTE: If you are going to use the Microsoft API as favourite translator, be sure to fill both
+						 Client ID and Client Secret, otherwise the Microsoft API will get automatically bypassed
+						 and the plugin will backup using the Google API
+		
+		-->
+		
+        <set name="defaultSourceLang"></set>
+        <set name="defaultTargetLang">en</set>
+        <set name="favouriteTranslator">Google</set>
+        <set name="displayTranslatorName">True</set>
+        <set name="minSentenceLength">6</set>
+        <set name="transTextColorPrefix">^3</set>
+		<set name="microsoftClientId"></set>
+		<set name="microsoftClientSecret"></set>
+	</settings>
+	<settings name="commands">
+        <set name="translate-trans">2</set>
+        <set name="translast">2</set>
+        <set name="transauto">80</set>
+        <set name="translang">2</set>
+        <set name="transchange">80</set>
+        <set name="transname">80</set>
+	</settings>
+</configuration>

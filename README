@@ -1,0 +1,44 @@
+Translator plugin for BigBrotherBot (www.bigbrotherbot.net)
+=============================================================
+
+By Mr.Click
+
+
+Description
+-----------
+This plugin is capable of translating in-game messages (chat) using Google Translate API or Microsoft Translator API
+
+Installation
+------------
+
+ * copy translator.py into b3/extplugins
+ * copy translator.xml into b3/extplugins/conf
+ * edit your b3.xml config file adding :
+ 
+<plugin name="translator" config="@b3/extplugins/conf/translator.xml"/>
+
+If you plan to use the Microsoft Translator API service you need to:
+
+1) Register a Windows Live ID -> https://signup.live.com/
+2) While logged with your Windows Live ID, create an Account on the Azure Data Market -> https://datamarket.azure.com/developer/applications/
+3) Go to the Microsoft Translator Data Service and Pick a Plan (The free one is 2.000.000 chars each month) -> https://datamarket.azure.com/dataset/1899a118-d202-492c-aa16-ba21c33c06cb
+4) Register an Azure application ->https://datamarket.azure.com/developer/applications
+5) While registering the new application u need to specify a "valid" website and a "valid" software name. You can just use as website "https://localhost" and as software name.....well you can enter whatever you want (we do love microsoft ^^ xD)
+
+The Azure Application registration, provides two critical fields for API access:
+
+Client ID
+Client Secret
+
+Put those credentials inside the translator.xml config file (be sure not to add spaces before and after)
+
+
+Changelog
+---------
+
+02/06/2012 - 1.0
+ - first release
+
+26/08/2012 - 1.1
+ - moved teamColor and stripColors into plugin class for standard b3 installation compatibility
+ - bigfixes and code cleanup
