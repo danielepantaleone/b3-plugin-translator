@@ -41,4 +41,5 @@ Changelog
 
 26/08/2012 - 1.1
  - moved teamColor and stripColors into plugin class for standard b3 installation compatibility
+ - fixed an issue Microsoft Translator related
  - bigfixes and code cleanup
