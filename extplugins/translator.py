@@ -32,7 +32,7 @@
 
 
 __author__ = 'Mr.Click - http://goreclan.net'
-__version__ = '1.1'
+__version__ = '1.1.1'
 
 import b3
 import b3.plugin
