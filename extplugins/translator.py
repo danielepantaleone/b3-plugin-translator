@@ -27,6 +27,9 @@
 #  - fixed an issue Microsoft Translator related
 #  - bugfixes and code cleanup
 #
+# 11/09/2012 - 1.1.1
+#  - fixed typo [thanks 82ndAB.Bravo17]
+
 
 __author__ = 'Mr.Click - http://goreclan.net'
 __version__ = '1.1'
@@ -190,7 +193,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
                 self.debug('Favourite translator set to "%s".' % self._favouriteTranslator)
                 if platform.system() in ('Windows', 'Microsoft'):
                     self.debug('Disabling Google Translator. You need a UNIX like operating system in order to use this functionality.')
-                    self.debig('No other translation options available. Disabling the plugin.')
+                    self.debug('No other translation options available. Disabling the plugin.')
                     self.disable()
                     
         elif self._favouriteTranslator == 'Google':
