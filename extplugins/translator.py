@@ -204,7 +204,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
                 self.debug('Favourite translator set to "%s".' % self._favouriteTranslator)
                 if self._microsoftClientId == '' or self._microsoftClientSecret == '':
                     self.debug('Disabling Microsoft Translator. Microsoft Translator API service credentials not specified.')
-                    self.debig('No other translation options available. Disabling the plugin.')
+                    self.debug('No other translation options available. Disabling the plugin.')
                     self.disable()
 
 
