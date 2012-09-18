@@ -1,7 +1,7 @@
 # coding: utf-8
 #
 # Translator Plugin for BigBrotherBot
-# Copyright (C) 2012 Mr.Click
+# Copyright (C) 2012 Fenix
 # 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 #  - fixed typo [thanks 82ndAB.Bravo17]
 
 
-__author__ = 'Mr.Click - http://goreclan.net'
+__author__ = 'Fenix - http://goreclan.net'
 __version__ = '1.1.1'
 
 import b3
