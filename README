@@ -33,7 +33,7 @@ Client Secret
 Put those credentials inside the translator.xml config file (be sure not to add spaces before and after)
 
 
-Changelog
+CHANGELOG
 ---------
 
 02/06/2012 - 1.0
@@ -43,3 +43,10 @@ Changelog
  - moved teamColor and stripColors into plugin class for standard b3 installation compatibility
  - fixed an issue Microsoft Translator related
  - bigfixes and code cleanup
+ 
+11/09/2012 - 1.1.1
+ - fixed typo [thanks 82ndAB.Bravo17]
+
+14/12/2012 - 1.2
+ - fixed some words spelling
+ - do not display translation, if the translator service returned back the given string

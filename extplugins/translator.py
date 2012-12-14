@@ -31,7 +31,8 @@
 #  - fixed typo [thanks 82ndAB.Bravo17]
 #
 # 14/12/2012 - 1.2
-#  - do not display translation in !transauto if there are no changes with the original sentence
+#  - fixed some words spelling
+#  - do not display translation, if the translator service returned back the given string
 
 
 __author__ = 'Fenix - http://goreclan.net'
@@ -394,6 +395,11 @@ class TranslatorPlugin(b3.plugin.Plugin):
             message = message.capitalize()
             
             if message != '':
+                # If the translated message is the same of the said sentence, do not display any message
+                if message.lower() == sentence.lower().strip():
+                    self.debug('Skipping translation display. Google Translate API service returned the given text string.')
+                    return False
+                
                 self.displayTranslation(client, cmd, message,'Google')
                 self.debug('Sentence correctly translated using Google Translate API service.')    
                 return True
@@ -437,6 +443,11 @@ class TranslatorPlugin(b3.plugin.Plugin):
                 message = message.capitalize()
                 
                 if message != '':
+                    # If the translated message is the same of the said sentence, do not display any message
+                    if message.lower() == sentence.lower().strip():
+                        self.debug('Skipping translation display. Microsoft Translator API service returned the given text string.')
+                        return False
+                    
                     self.displayTranslation(client, cmd, message, 'Microsoft')
                     self.debug('Sentence correctly translated using Microsoft Translator API service.') 
                     return True
