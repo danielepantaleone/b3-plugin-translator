@@ -29,10 +29,13 @@
 #
 # 11/09/2012 - 1.1.1
 #  - fixed typo [thanks 82ndAB.Bravo17]
+#
+# 14/12/2012 - 1.2
+#  - do not display translation in !transauto if there are no changes with the original sentence
 
 
 __author__ = 'Fenix - http://goreclan.net'
-__version__ = '1.1.1'
+__version__ = '1.2'
 
 import b3
 import b3.plugin
@@ -50,7 +53,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
     
     _defaultSourceLang = ''
     _defaultTargetlang = 'en'
-    _favouriteTranslator = 'Google'
+    _favoriteTranslator = 'Google'
     _displayTranslatorName = False
     _minSentenceLength = 8
     _transTextColorPrefix = '^3'
@@ -123,15 +126,15 @@ class TranslatorPlugin(b3.plugin.Plugin):
             self.error('Exception launched while loading default target language configuration. Check your XML config file.')
             pass
         
-        # Loading favourite translator configuration
+        # Loading favorite translator configuration
         try:
-            if self.config.get('settings', 'favouriteTranslator') not in self._translators:
-                self.debug('Invalid or empty value in favourite translator configuration. Using default translator: "%s".' % self._favouriteTranslator)
+            if self.config.get('settings', 'favoriteTranslator') not in self._translators:
+                self.debug('Invalid or empty value in favorite translator configuration. Using default translator: "%s".' % self._favoriteTranslator)
             else:
-                self._favouriteTranslator = self.config.get('settings', 'favouriteTranslator')
-                self.debug('Favourite translator set to "%s".' % self._favouriteTranslator)
+                self._favoriteTranslator = self.config.get('settings', 'favoriteTranslator')
+                self.debug('Favorite translator set to "%s".' % self._favoriteTranslator)
         except:
-            self.error('Exception launched while loading favourite translator configuration. Check your XML config file.')
+            self.error('Exception launched while loading favorite translator configuration. Check your XML config file.')
             pass
         
         # Loading display translator name configuration
@@ -184,24 +187,24 @@ class TranslatorPlugin(b3.plugin.Plugin):
             self.error('Exception launched while loading Microsoft Translator API service client secret configuration. Check your XML config file.')
             pass
         
-        # Checking favourite translator correct configuration
-        if self._favouriteTranslator == 'Microsoft':
+        # Checking favorite translator correct configuration
+        if self._favoriteTranslator == 'Microsoft':
             
             if self._microsoftClientId == '' or self._microsoftClientSecret == '':
-                self._favouriteTranslator = 'Google'
+                self._favoriteTranslator = 'Google'
                 self.debug('Disabling Microsoft Translator. Microsoft Translator API service credentials not specified.')
-                self.debug('Favourite translator set to "%s".' % self._favouriteTranslator)
+                self.debug('Favorite translator set to "%s".' % self._favoriteTranslator)
                 if platform.system() in ('Windows', 'Microsoft'):
                     self.debug('Disabling Google Translator. You need a UNIX like operating system in order to use this functionality.')
                     self.debug('No other translation options available. Disabling the plugin.')
                     self.disable()
                     
-        elif self._favouriteTranslator == 'Google':
+        elif self._favoriteTranslator == 'Google':
             
             if platform.system() in ('Windows', 'Microsoft'):
-                self._favouriteTranslator = 'Microsoft'
+                self._favoriteTranslator = 'Microsoft'
                 self.debug('Disabling Google Translator. You need a UNIX like operating system in order to use this functionality.')
-                self.debug('Favourite translator set to "%s".' % self._favouriteTranslator)
+                self.debug('Favorite translator set to "%s".' % self._favoriteTranslator)
                 if self._microsoftClientId == '' or self._microsoftClientSecret == '':
                     self.debug('Disabling Microsoft Translator. Microsoft Translator API service credentials not specified.')
                     self.debug('No other translation options available. Disabling the plugin.')
@@ -458,7 +461,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
         """\
         Translate the given sentence in the specified target language
         """
-        if self._favouriteTranslator == 'Google':
+        if self._favoriteTranslator == 'Google':
             
             result = self.translateWithGoogle(client, cmd, sentence, targetLang, sourceLang)
             if not result:
@@ -472,7 +475,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
                     self.debug('Unable to use Microsoft Translator API service.')
                     client.message('^7Unable to translate')
                     
-        elif self._favouriteTranslator == 'Microsoft':
+        elif self._favoriteTranslator == 'Microsoft':
             
             result = self.translateWithMicrosoft(client, cmd, sentence, targetLang, sourceLang)
             if not result:
@@ -651,15 +654,15 @@ class TranslatorPlugin(b3.plugin.Plugin):
         """\
         Switch the favourite translator service
         """
-        if self._favouriteTranslator == 'Microsoft':
+        if self._favoriteTranslator == 'Microsoft':
             
             if platform.system() in ('Windows', 'Microsoft'):
                 client.message('^7Unable to change Translator service')
                 return False
             
-            self._favouriteTranslator = 'Google'
-            self.debug('Favourite Translator service changed to %s.' % self._favouriteTranslator)
-            client.message('^7Translator service changed to ^4%s' % self._favouriteTranslator)
+            self._favoriteTranslator = 'Google'
+            self.debug('Favorite Translator service changed to %s.' % self._favoriteTranslator)
+            client.message('^7Translator service changed to ^4%s' % self._favoriteTranslator)
             
         else:
             
@@ -667,9 +670,9 @@ class TranslatorPlugin(b3.plugin.Plugin):
                 client.message('^7Unable to change Translator service')
                 return False
             
-            self._favouriteTranslator = 'Microsoft'
-            self.debug('Favourite Translator service changed to %s' % self._favouriteTranslator)
-            client.message('^7Translator service changed to ^4%s' % self._favouriteTranslator)
+            self._favoriteTranslator = 'Microsoft'
+            self.debug('Favorite Translator service changed to %s' % self._favoriteTranslator)
+            client.message('^7Translator service changed to ^4%s' % self._favoriteTranslator)
         
     
     def cmd_transname(self, data, client, cmd=None):

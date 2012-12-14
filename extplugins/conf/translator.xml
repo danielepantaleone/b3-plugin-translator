@@ -28,7 +28,7 @@
 		
         <set name="defaultSourceLang"></set>
         <set name="defaultTargetLang">en</set>
-        <set name="favouriteTranslator">Google</set>
+        <set name="favoriteTranslator">Google</set>
         <set name="displayTranslatorName">True</set>
         <set name="minSentenceLength">6</set>
         <set name="transTextColorPrefix">^3</set>
