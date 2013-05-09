@@ -38,7 +38,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
         'default_source_language' : '',
         'default_target_language' : 'en',
         'display_translator_name' : True,
-        'translator_name'         : '^7[^4Microsoft^7]',
+        'translator_name'         : '^7[^1TRANSLATOR^7] ',
         'message_prefix'          : '^3',
         'min_sentence_length'     : 6,
         'microsoft_client_id'     : '',
