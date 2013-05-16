@@ -19,7 +19,7 @@
 #
 
 __author__ = 'Fenix - http://www.goreclan.net'
-__version__ = '2.0'
+__version__ = '2.0.1'
 
 import b3
 import b3.plugin
@@ -277,7 +277,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
                 for c in self.console.clients.getList():
                     # We'll not send the translation to the
                     # same guy who wrote the message
-                    if c.cid != client.cid:
+                    if c.cid == client.cid:
                         continue
                     
                     if c.isvar(self,'transauto') and c.var(self,'transauto').value == True:
