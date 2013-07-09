@@ -1,7 +1,7 @@
 # coding: utf-8
 #
-# Translator Plugin for BigBrotherBot
-# Copyright (C) 2012 Fenix
+# Plugin for BigBrotherBot(B3) (www.bigbrotherbot.net)
+# Copyright (C) Copyright (C) 2012 Fenix <fenix@urbanterror.info)
 # 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,9 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-#
 
-__author__ = 'Fenix - http://www.goreclan.net'
+__author__ = 'Fenix - http://www.urbanterror.info'
 __version__ = '2.0.1'
 
 import b3
