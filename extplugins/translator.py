@@ -18,7 +18,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 __author__ = 'Fenix - http://www.urbanterror.info'
-__version__ = '2.0.1'
+__version__ = '2.0.2'
 
 import b3
 import b3.plugin
@@ -499,7 +499,10 @@ class TranslatorPlugin(b3.plugin.Plugin):
         
         if params[0] == 'on':
             
-            target_language = self._settings['default_target_language']
+            if client.isvar(self, 'translang'):
+                target_language = client.var(self, 'translang').value
+            else:
+                target_language = self._settings['default_target_language']
             
             if len(params) == 2:
                 if params[1] not in self._languages.keys():
