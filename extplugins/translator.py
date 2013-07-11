@@ -84,136 +84,96 @@ class TranslatorPlugin(b3.plugin.Plugin):
         
         try:
             
-            # Loading default source language setting
             if not self.config.get('settings', 'default_source_language'):
-                # Source language setting detected as empty
                 self.debug('Default source language detected as empty. Using automatic language detection')
             elif not self._languages.has_key(self.config.get('settings', 'default_source_language')):
-                # Invalid language code specified in source language setting
                 self.warn('Invalid language code specified as default source language. Using automatic language detection')
             else:
                 self._settings['default_source_language'] = self.config.get('settings', 'default_source_language')
                 self.debug('Default source language set to: %s' % self._languages[self._settings['default_source_language']])
         
         except Exception, e:
-
             self.error('Unable to read default source language setting: %s' % e)
             self.debug('Using automatic language detection as source language')
-            pass
-        
         
         try:
             
-            # Loading default target language setting
             if not self._languages.has_key(self.config.get('settings', 'default_target_language')):
-                # Invalid language code specified in target language setting
                 self.warn('Invalid language code specified as default target language. Using default setting: %s' % self._languages[self._settings['default_target_language']])
             else:
                 self._settings['default_target_language'] = self.config.get('settings', 'default_target_language')
                 self.debug('Default target language set to: %s' % self._languages[self._settings['default_target_language']])
         
         except Exception, e:
-
             self.error('Unable to read default target language setting: %s' % e)
             self.debug('Using default setting as target language: %s' % self._languages[self._settings['default_target_language']])
-            pass
-        
+
         
         try:
             
-            # Loading translator name display setting
             self._settings['display_translator_name'] = self.config.getboolean('settings', 'display_translator_name')
             self.debug('Translator name display set to: %r' % self._settings['display_translator_name'])
             
-        except Exception, e:
-            
+        except Exception, e:            
             self.error('Unable to read translator name display setting: %s' % e)
             self.debug("Using default setting for translator name display: %r" % self._settings['display_translator_name'])
-            pass
-        
-        
+
         try:
             
-            # Loading translator name setting
             self._settings['translator_name'] = self.config.get('settings', 'translator_name')
             self.debug('Translator name set to: %s' % self._settings['translator_name'])
             
         except Exception, e:
-            
             self.error('Unable to read translator name setting: %s' % e)
             self.debug('Using default setting for translator name: %s' % self._settings['translator_name'])
-            pass
-        
         
         try:
             
-            # Loading message prefix setting
             self._settings['message_prefix'] = self.config.get('settings', 'message_prefix')
             self.debug('Message prefix set to: %s' % self._settings['message_prefix'])
             
         except Exception, e:
-            
             self.error('Unable to read message prefix setting: %s' % e)
             self.debug('Using default setting for message prefix: %s' % self._settings['message_prefix'])
-            pass
-        
         
         try:
             
-            # Loading minimum sentence length setting
             if self.config.getint('settings', 'min_sentence_length') <= 0:
-                # Minimum sentence length detected as 0 or negative
                 self.warn('Minimum sentence length value must be positive. Using default setting: %d' % self._settings['min_sentence_length'])
             else:
                 self._settings['min_sentence_length'] = self.config.getint('settings', 'min_sentence_length')
                 self.debug('Minimum sentence length set to: %d' % self._settings['min_sentence_length'])
         
         except Exception, e:
-            
             self.error('Unable to read minimum sentence length setting: %s' % e)
             self.debug('Using default setting for minimum sentence length: %d' % self._settings['min_sentence_length'])
-            pass
-        
         
         try:
             
-            # Loading Microsoft translator client id setting
             if not self.config.get('settings', 'microsoft_client_id'):
-                # Microsoft Translator client id not specified
                 self.warn('Microsoft translator client id not specified. Plugin will be disabled')
             else:     
                 self._settings['microsoft_client_id'] = self.config.get('settings', 'microsoft_client_id')
                 self.debug('Microsoft translator client id set to: %s' % self._settings['microsoft_client_id'])
             
         except Exception, e:
-            
             self.error('Unable to read Microsoft translator client id setting: %s' % e)
             self.debug('Unable to start plugin without Microsoft client id. Plugin will be disabled')
-            pass
-        
         
         try:
             
-            # Loading Microsoft translator client secret setting
             if not self.config.get('settings', 'microsoft_client_secret'):
-                # Microsoft Translator client secret not specified
                 self.warn('Microsoft translator client secret not specified. Plugin will be disabled')
             else:     
                 self._settings['microsoft_client_secret'] = self.config.get('settings', 'microsoft_client_secret')
                 self.debug('Microsoft translator client secret set to: %s' % self._settings['microsoft_client_secret'])
             
         except Exception, e:
-            
             self.error('Unable to read Microsoft translator client secret setting: %s' % e)
             self.debug('Unable to start plugin without Microsoft client secret. Plugin will be disabled')
-            pass
     
-
-        # Just to notice that the config file has been loaded
-        self.verbose('Configuration file loaded!')
-            
+        # Checking correct Microsoft Translator API service configuration
         if not self._settings['microsoft_client_id'] or not self._settings['microsoft_client_secret']:
-            # Microsoft Translator settings missing or incomplete
             self.debug('Disabling the plugin...')
             self.disable()
         
@@ -233,10 +193,12 @@ class TranslatorPlugin(b3.plugin.Plugin):
                 level = self.config.get('commands', cmd)
                 sp = cmd.split('-')
                 alias = None
-                if len(sp) == 2: cmd, alias = sp
+                if len(sp) == 2: 
+                    cmd, alias = sp
 
                 func = self.getCmd(cmd)
-                if func: self._adminPlugin.registerCommand(self, cmd, level, func, alias)
+                if func: 
+                    self._adminPlugin.registerCommand(self, cmd, level, func, alias)
         
         # Register the events needed
         self.registerEvent(b3.events.EVT_CLIENT_SAY)
@@ -262,10 +224,9 @@ class TranslatorPlugin(b3.plugin.Plugin):
         message = event.data.strip()
         client = event.client
         
-        # Check if minimum sentence length is enough for a translation
         if len(message) >= self._settings['min_sentence_length']:
             
-            # Check if a b3 command has been issued
+            # Check if a b3 command has been issued and if so do nothing
             if message[0] not in (self._adminPlugin.cmdPrefix, self._adminPlugin.cmdPrefixLoud, self._adminPlugin.cmdPrefixBig):
                 
                 # Storing for future use
@@ -274,8 +235,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
                 # We have now to send a translation to all the 
                 # clients that enabled the automatic translation
                 for c in self.console.clients.getList():
-                    # We'll not send the translation to the
-                    # same guy who wrote the message
+                    
                     if c.cid == client.cid:
                         continue
                     
@@ -301,12 +261,10 @@ class TranslatorPlugin(b3.plugin.Plugin):
         Make an HTTP POST request to the token service, and return the access_token
         See description here: http://msdn.microsoft.com/en-us/library/hh454949.aspx
         """
-        data = urllib.urlencode({
-                'client_id'     : client_id,
-                'client_secret' : client_secret,
-                'grant_type'    : 'client_credentials',
-                'scope'         : 'http://api.microsofttranslator.com'
-                })
+        data = urllib.urlencode({ 'client_id'     : client_id,
+                                  'client_secret' : client_secret,
+                                  'grant_type'    : 'client_credentials',
+                                  'scope'         : 'http://api.microsofttranslator.com' })
     
         try:
     
@@ -316,11 +274,8 @@ class TranslatorPlugin(b3.plugin.Plugin):
             response_data = json.loads(response.read())
     
             if response_data.has_key('access_token'):
-                # We got a proper token in the response
                 return response_data['access_token']
             else:
-                # No token received or bad one
-                # We'll handle this somewhere else
                 return False
     
         except urllib2.URLError, e:
@@ -341,8 +296,9 @@ class TranslatorPlugin(b3.plugin.Plugin):
         Convert the given unicode string to a bytestring, using utf-8 encoding.
         If it is already a bytestring, just return the string given
         """
-        if isinstance(s, str): return s
-        else: return s.encode('utf-8')   
+        if isinstance(s, str): 
+            return s
+        return s.encode('utf-8')   
     
     
     def replaceSpecialChars(self, s):
@@ -399,11 +355,13 @@ class TranslatorPlugin(b3.plugin.Plugin):
             if not token:
                 self.warn('Unable to retrieve Microsoft Translator API access token using provided credentials: [ client id: %s | secret: %s ].' % (self._settings['microsoft_client_id'], self._settings['microsoft_client_secret']))
                 client.message('^7Unable to translate')
-                return False
+                return
             
-            # We got a proper access token. Trying to translate the sentence
-            data = { 'text' : self.toByteString(sentence), 'to' : target_language }
-            if source_language != '':  data['from'] = source_language
+            data = { 'text' : self.toByteString(sentence), 
+                     'to'   : target_language }
+            
+            if source_language != '':  
+                data['from'] = source_language
             
             request = urllib2.Request('http://api.microsofttranslator.com/v2/Http.svc/Translate?' + urllib.urlencode(data))
             request.add_header('Authorization', 'Bearer ' + token)
@@ -416,12 +374,10 @@ class TranslatorPlugin(b3.plugin.Plugin):
             message = message.strip()                       # Remove unnecessary white spaces
             
             if not message:
-                # Translator service returned an empty string
                 self.debug('Translation using Microsoft Translator API service failed: empty string returned')
                 client.message('^7Unable to translate')
                 return False
             
-            # Message has been translated correctly. Displaying the translation
             self.debug('Message correctly translated [ source : %s | result : %s ]' % (sentence, message))
             name_prefix = self._settings['translator_name'] if self._settings['display_translator_name'] else ''
             
@@ -439,16 +395,16 @@ class TranslatorPlugin(b3.plugin.Plugin):
             if hasattr(e,'reason'):
                 self.debug('Could not connect to the Microsoft Translator server: %s' % (e.reason))
                 client.message('^7Unable to translate')
-                return False
+                return
             elif hasattr(e, 'code'):
                 self.debug('Microsoft Translator server error: %s' % (str(e.code)))
                 client.message('^7Unable to translate')
-                return False
+                return
         
         except TypeError, e:
             self.debug('Translation failed. TypeError exception: %s.' % e)
             client.message('^7Unable to translate')
-            return False
+            return
         
     
     ############################################################################################    
@@ -462,43 +418,35 @@ class TranslatorPlugin(b3.plugin.Plugin):
         """
         if not data: 
             client.message('^7Invalid data, try ^3!^7help translate')
-            return False
+            return
 
         source_language = self._settings['default_source_language']
         target_language = self._settings['default_target_language']
         
-        # Checking if the user specified language codes
         language = data.split(' ', 1)[0]
         (source, separator, target) = language.partition('*')
         
         if separator == '*':
             
-            # Checking if the given language codes are supported by the plugin
             self.verbose('Detected language codes: checking if those codes are supported by the plugin')
             
             if not source:
-                # Source language not specified. Using default source language (which could also be auto detection)
                 self.verbose('Source language not specified. Using default source language for the translation')
             elif source not in self._languages.keys():
-                # Specified source language is not supported
                 self.verbose('Invalid source language specified [\'%s\'] in !translate command: unable to translate' % source)
                 client.message('^7Invalid source language specified, try ^3!^7translang')
-                return False
+                return
             else:
-                # We got a supported source language as input
                 self.verbose('Performing translation using specified source language[\'%s\']' % source)
                 source_language = source
                 
             if not target:
-                # Target language not specified. Using default target language
                 self.verbose('Target language not specified. Using default target language for the translation')
             elif source not in self._languages.keys():
-                # Specified target language is not supported
                 self.verbose('Invalid target language specified [\'%s\'] in !translate command: unable to translate' % target)
                 client.message('^7Invalid target language specified, try ^3!^7translang')
-                return False
+                return
             else:
-                # We got a supported target language as input
                 self.verbose('Performing translation using specified target language[\'%s\']' % target)
                 target_language = target
             
@@ -506,10 +454,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
             # we are going to remove them from the sentence to be translated
             data = data.split(' ', 1)[1]
         
-        # Removing color codes from the message
         data = self.stripColors(data)
-            
-        # We got everything we need to perform a translation
         thread.start_new_thread(self.translate, (client, cmd, data, target_language, source_language))
 
 
@@ -519,26 +464,22 @@ class TranslatorPlugin(b3.plugin.Plugin):
         """
         if not self._lastMessage:
             client.message('^7Unable to translate last message')
-            return False
+            return
         
         target_language = self._settings['default_target_language']
         
         if data:
             
-            # Checking if the given language codes are supported by the plugin
             self.verbose('Detected language code: checking if it\'s supported by the plugin')
             
             if data not in self._languages.keys():
-                # Specified target language is not supported
                 self.verbose('Invalid target language specified [\'%s\'] in !translast command: unable to translate' % data)
                 client.message('^7Invalid target language specified, try ^3!^7translang')
-                return False
+                return
             else:
-                # We got a supported target language as input
                 self.verbose('Performing translation using specified target language[\'%s\']' % data)
                 target_language = data
         
-        # We got everything we need to perform a translation
         thread.start_new_thread(self.translate, (client, cmd, self._lastMessage, target_language, ''))
         
     
@@ -548,31 +489,26 @@ class TranslatorPlugin(b3.plugin.Plugin):
         """
         if not data: 
             client.message('^7Invalid data, try ^3!^7help transauto')
-            return False
+            return
         
         params = data.split(' ')
         
         if (len(params) != 1 and len(params) != 2) or (params[0] not in ('on','off')):
             client.message('^7Invalid data, try ^3!^7help transauto')
-            return False
+            return
         
         if params[0] == 'on':
             
             target_language = self._settings['default_target_language']
             
             if len(params) == 2:
-                # Target language specified
-                # Checking if it's supported by the plugin
                 if params[1] not in self._languages.keys():
                     self.debug('Invalid target language specified [\'%s\'] in !transauto command' % params[1])
                     client.message('^7Invalid target language specified, try ^3!^7translang')
-                    return False
+                    return
                 
-                # Specified target language is supported
                 target_language = params[1]
            
-            # We got everything we need to turn automatic translation on
-            # We'll set informations in the client object for future use
             client.setvar(self, 'transauto', True)
             client.setvar(self, 'translang', target_language)
             client.message('^7Automatic translation: ^2ON^7. Language: ^4%s' % self._languages[target_language])
