@@ -6,7 +6,7 @@
         <set name="translator_name">^7[^1T^7] </set>     <!-- a name with which to prefix translated messages -->
         <set name="message_prefix">^3</set>              <!-- a color code with which to prefix translated messages -->
         <set name="min_sentence_length">6</set>          <!-- minimum length of a message to be translated using !transauto and !translast  -->
-        <set name="microsoft_client_id"></set>           <!-- Microsoft translator client id -->
+        <set name="microsoft_client_id"></set>           <!-- microsoft translator client id -->
         <set name="microsoft_client_secret"></set>       <!-- microsoft translator client secret -->
     </settings>
     <settings name="commands">
