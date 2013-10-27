@@ -335,7 +335,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
                 client.message('^7Unable to translate')
                 return
             
-            self.debug('message correctly translated [ source : %s | result : %s ]' % (sentence, msg))
+            self.debug('message translated [ source [%s] : %s | result [%s] : %s ]' % (source, sentence, target, msg))
 
             # set the correct message prefix
             name = self._translatorName if self._displayTranslatorName else ''
@@ -407,7 +407,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
                 return
             else:
                 # just print in the log so we know that the target language is supported
-                self.verbose('Performing translation using specified target language [%s]' % tgt)
+                self.verbose('performing translation using specified target language [%s]' % tgt)
 
             data = msg
         
