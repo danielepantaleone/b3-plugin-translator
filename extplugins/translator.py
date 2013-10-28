@@ -18,7 +18,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 __author__ = 'Fenix - http://www.urbanterror.info'
-__version__ = '2.1'
+__version__ = '2.2'
 
 import b3
 import b3.plugin
@@ -65,7 +65,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
             if not self.config.get('settings', 'default_source_language'):
                 self.debug('default source language detected empty: using automatic language detection')
             elif not self.config.get('settings', 'default_source_language') in self._languages.keys():
-                self.warn('invalid language specified as default source: using automatic language detection')
+                self.warning('invalid language specified as default source: using automatic language detection')
             else:
                 self._defaultSourceLang = self.config.get('settings', 'default_source_language')
                 self.debug('default source language set to: %s' % self._defaultSourceLang)
@@ -77,7 +77,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
         try:
 
             if not self.config.get('settings', 'default_target_language') in self._languages.keys():
-                self.warn('invalid language specified as default target: using default: %s' % self._defaultTargetLang)
+                self.warning('invalid language specified as default target: using default: %s' % self._defaultTargetLang)
             else:
                 self._defaultTargetLang = self.config.get('settings', 'default_target_language')
                 self.debug('default target language set to: %s' % self._defaultTargetLang)
@@ -116,7 +116,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
         try:
             
             if self.config.getint('settings', 'min_sentence_length') <= 0:
-                self.warn('minimum sentence length must be positive: using default: %d' % self._minSentenceLength)
+                self.warning('minimum sentence length must be positive: using default: %d' % self._minSentenceLength)
             else:
                 self._minSentenceLength = self.config.getint('settings', 'min_sentence_length')
                 self.debug('minimum sentence length set to: %d' % self._minSentenceLength)
@@ -128,7 +128,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
         try:
             
             if not self.config.get('settings', 'microsoft_client_id'):
-                self.warn('microsoft translator client id not specified: plugin will be disabled')
+                self.warning('microsoft translator client id not specified: plugin will be disabled')
             else:     
                 self._microsoftClientId = self.config.get('settings', 'microsoft_client_id')
                 self.debug('microsoft translator client id set to: %s' % self._microsoftClientId)
@@ -140,7 +140,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
         try:
             
             if not self.config.get('settings', 'microsoft_client_secret'):
-                self.warn('microsoft translator client secret not specified: plugin will be disabled')
+                self.warning('microsoft translator client secret not specified: plugin will be disabled')
             else:     
                 self._microsoftClientSecret = self.config.get('settings', 'microsoft_client_secret')
                 self.debug('microsoft translator client secret set to: %s' % self._microsoftClientSecret)
@@ -313,7 +313,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
             token = self.getMicrosoftAccessToken(self._microsoftClientId, self._microsoftClientSecret)
         
             if not token:
-                self.warn('could not retrieve microsoft translator api access token')
+                self.warning('could not retrieve microsoft translator api access token')
                 client.message('^7Unable to translate')
                 return
             
