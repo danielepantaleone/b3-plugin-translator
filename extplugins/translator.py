@@ -18,7 +18,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 __author__ = 'Fenix - http://www.urbanterror.info'
-__version__ = '2.2'
+__version__ = '2.2.1'
 
 import b3
 import b3.plugin
@@ -59,7 +59,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
         Load the configuration file
         """
         self.verbose('Loading configuration file...')
-        
+
         try:
 
             if not self.config.get('settings', 'default_source_language'):
@@ -189,10 +189,19 @@ class TranslatorPlugin(b3.plugin.Plugin):
         """
         if event.type == b3.events.EVT_CLIENT_SAY:
             self.onSay(event)
+        elif event.type == b3.events.EVT_CLIENT_CONNECT:
+            self.onConnect(event)
+
+    def onConnect(self, event):
+        """\
+        Handle EVT_CLIENT_CONNECT
+        """
+        client = event.client
+        client.setvar(self, 'transauto', False)
 
     def onSay(self, event):
         """\
-        Handle say events
+        Handle EVT_CLIENT_SAY
         """
         ms = event.data.strip()
         cl = event.client
@@ -217,10 +226,10 @@ class TranslatorPlugin(b3.plugin.Plugin):
                     continue
 
                 # skip if automatic translation is disabled
-                if not c.isvar(self,'transauto') or c.var(self,'transauto').value:
+                if not c.var(self, 'transauto').value:
                     continue
 
-                thread.start_new_thread(self.translate, (c, None, ms, c.var(self,'translang').value, ''))
+                thread.start_new_thread(self.translate, (c, None, ms, c.var(self, 'translang').value, ''))
 
     ############################################################################################    
     # ####################################### FUNCTIONS ###################################### #
