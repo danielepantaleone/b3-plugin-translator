@@ -18,13 +18,14 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 __author__ = 'Fenix - http://www.urbanterror.info'
-__version__ = '2.2.1'
+__version__ = '2.2.2'
 
 import b3
 import b3.plugin
 import b3.events
 import thread
-import urllib, urllib2
+import urllib
+import urllib2
 import json
 import re
 
@@ -44,8 +45,8 @@ class TranslatorPlugin(b3.plugin.Plugin):
     _microsoftClientSecret = ''
 
     _lastSentenceSaid = ''
-    _messageParseRegEx = re.compile(r"""^(?P<source>\w*)[*]?(?P<target>\w*) (?P<sentence>.+)$""");
-    _transautoParseRegEx = re.compile(r"""^(?P<option>on|off)\s*(?P<target>\w*)$""");
+    _messageParseRegEx = re.compile(r"""^(?P<source>\w*)[*]?(?P<target>\w*) (?P<sentence>.+)$""")
+    _transautoParseRegEx = re.compile(r"""^(?P<option>on|off)\s*(?P<target>\w*)$""")
 
     # available languages
     _languages = dict(ca='Catalan', cs='Czech', da='Danish', nl='Dutch', en='English', et='Estonian', fi='Finnish',
@@ -58,8 +59,6 @@ class TranslatorPlugin(b3.plugin.Plugin):
         """\
         Load the configuration file
         """
-        self.verbose('Loading configuration file...')
-
         try:
 
             if not self.config.get('settings', 'default_source_language'):
@@ -89,11 +88,11 @@ class TranslatorPlugin(b3.plugin.Plugin):
         try:
             
             self._displayTranslatorName = self.config.getboolean('settings', 'display_translator_name')
-            self.debug('translator name display set to: %r' % self._displayTranslatorName)
+            self.debug('translator name display set to: %s' % self._displayTranslatorName)
             
         except Exception, e:            
             self.error('could not read translator name display setting: %s' % e)
-            self.debug("using default setting for translator name display: %r" % self._displayTranslatorName)
+            self.debug("using default setting for translator name display: %s" % self._displayTranslatorName)
 
         try:
             
@@ -178,6 +177,9 @@ class TranslatorPlugin(b3.plugin.Plugin):
         
         # register the events needed
         self.registerEvent(b3.events.EVT_CLIENT_SAY)
+
+        # notice plugin startup
+        self.debug('plugin started')
         
     ############################################################################################    
     # ######################################## EVENTS ######################################## #
