@@ -172,6 +172,15 @@ class TranslatorPlugin(b3.plugin.Plugin):
     ##                                                                                                                ##
     ####################################################################################################################
 
+    def onEnable(self):
+        """\
+        Executed when the plugin is enabled
+        """
+        if not self._settings['microsoft_client_id'] or not self._settings['microsoft_client_secret']:
+            self.disable()
+            self.warning('could not enable plugin translator: microsoft translator is not configured properly')
+            self.console.say('Plugin ^3Translator ^7is now ^1OFF')
+
     def onSay(self, event):
         """\
         Handle EVT_CLIENT_SAY and EVT_CLIENT_SAY_TEAM
