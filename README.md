@@ -4,14 +4,15 @@ Translator Plugin for BigBrotherBot
 ## Description
 
 This plugin is capable o translating in-game chat messages into a specified language using the Microsoft Translator API service.<br> 
-Previous versions of this plugin were supporting 2 translation services: **Google Translate** and **Microsoft Translator**. I decided to remove the Google Translate support because Google Translate API service are now available only as a paid service. Microsoft Translator API otherwise offers different paid translation plans, plus a limited free translation plan.
+Previous versions of this plugin were supporting 2 translation services: **Google Translate** and **Microsoft Translator**. I decided to remove the Google Translate support because Google Translate API service are now available only as a paid service. Microsoft Translator API otherwise offers different paid translation plans, plus a limited free translation plan.<br /> <br />
+*NOTE*: since version 2.3 this plugin works only with b3 1.10-dev or higher: http://files.cucurb.net/b3/daily/
 
 ## How to install
 
 ### Installing the plugin
 
 * Copy **translator.py** into **b3/extplugins**
-* Copy **translator.xml** into **b3/extplugins/conf**
+* Copy **plugin_translator.ini** into **b3/extplugins/conf**
 * Load the plugin in your **b3.xml** configuration file
 
 ### Microsoft Translator API configuration
@@ -24,8 +25,8 @@ Previous versions of this plugin were supporting 2 translation services: **Googl
 
 **NOTE**: You can use as website **http://localhost** and as software name whatever name you like more
 
-The Azure Application registration, provides two critical fields for API access: **client id** and **client secret**<br>
-Put those credentials inside the plugin configuration file (be sure not to add spaces before and after)
+The Azure Application registration, provides two critical fields for API access: **client id** and **client secret**:<br>
+you have to put those credentials inside the plugin configuration file.
 
 ## Support
 
