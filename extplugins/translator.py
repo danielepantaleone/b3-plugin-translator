@@ -18,7 +18,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 __author__ = 'Fenix'
-__version__ = '2.3'
+__version__ = '2.4'
 
 import b3
 import b3.plugin
@@ -161,7 +161,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
         
         # register the events needed
         self.registerEvent(b3.events.EVT_CLIENT_SAY, self.onSay)
-        self.registerEvent(b3.events.EVT_CLIENT_SAY_TEAM, self.onSay)
+        self.registerEvent(b3.events.EVT_CLIENT_TEAM_SAY, self.onSay)
 
         # notice plugin startup
         self.debug('plugin started')
