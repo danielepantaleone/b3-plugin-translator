@@ -18,7 +18,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 __author__ = 'Fenix'
-__version__ = '2.4'
+__version__ = '2.5'
 
 import b3
 import b3.plugin
@@ -62,7 +62,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
         """
         try:
             value = self.config.get('settings', 'default_source_language')
-            if value in self._languages.keys():
+            if value in self._languages.keys() or value == 'auto':
                 self._settings['default_source_language'] = value
                 self.debug('loaded default_source_language setting: %s' % self._settings['default_source_language'])
             else:
