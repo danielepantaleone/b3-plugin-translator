@@ -59,6 +59,7 @@ except ImportError:
 class TranslatorPlugin(b3.plugin.Plugin):
     
     adminPlugin = None
+    cmdPrefix = None
 
     # configuration values
     settings = {
@@ -190,8 +191,21 @@ class TranslatorPlugin(b3.plugin.Plugin):
             self.registerEvent(self.console.getEventID('EVT_CLIENT_SAY'), self.onSay)
             self.registerEvent(self.console.getEventID('EVT_CLIENT_TEAM_SAY'), self.onSay)
         except TypeError:
+            # keep retrocompatibility
             self.registerEvent(self.console.getEventID('EVT_CLIENT_SAY'))
             self.registerEvent(self.console.getEventID('EVT_CLIENT_TEAM_SAY'))
+
+        try:
+            # B3 > 1.10dev
+            self.cmdPrefix = (self.adminPlugin.cmdPrefix,
+                              self.adminPlugin.cmdPrefixLoud,
+                              self.adminPlugin.cmdPrefixBig,
+                              self.adminPlugin.cmdPrefixPrivate)
+        except AttributeError:
+            # B3 1.9.x
+            self.cmdPrefix = (self.adminPlugin.cmdPrefix,
+                              self.adminPlugin.cmdPrefixLoud,
+                              self.adminPlugin.cmdPrefixBig)
 
         # notice plugin startup
         self.debug('plugin started')
@@ -231,10 +245,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
             return
 
         # if it's not a B3 command
-        if message[0] not in (self.adminPlugin.cmdPrefix,
-                              self.adminPlugin.cmdPrefixLoud,
-                              self.adminPlugin.cmdPrefixBig,
-                              self.adminPlugin.cmdPrefixPrivate):
+        if message[0] not in self.cmdPrefix:
 
             # save for future use
             self.last_message_said = message
