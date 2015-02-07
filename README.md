@@ -14,12 +14,11 @@ Latest version available [here](https://github.com/danielepantaleone/b3-plugin-t
 Installation
 ------------
 
-* copy the `translator.py` file into `b3/extplugins`
-* copy the `plugin_translator.ini` file in `b3/extplugins/conf`
+* copy the `translator` folder into `b3/extplugins`
 * add to the `plugins` section of your `b3.xml` config file:
 
   ```xml
-  <plugin name="translator" config="@b3/extplugins/conf/plugin_translator.ini" />
+  <plugin name="translator" config="@b3/extplugins/translator/conf/plugin_translator.ini" />
   ```
 
 Microsoft Translator API configuration
