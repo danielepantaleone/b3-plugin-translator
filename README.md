@@ -6,6 +6,10 @@ Description
 
 A [BigBrotherBot][B3] plugin which is capable o translating in-game chat messages into a specified language.
 
+******
+*NOTE: since B3 v1.10.1 beta this plugin has been included in the standard plugins set, thus all patches and updates will be performed in the official B3 repository.*
+******
+
 Download
 --------
 
