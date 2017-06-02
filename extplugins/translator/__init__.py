@@ -28,10 +28,11 @@
 #                          - added automated tests
 # 2015/02/07 - 2.8 - Fenix - new plugin module structure
 # 2017/05/31 - 3.0 - GrosBedo & Lotabout - new interface to google via web scraping
-#                                                                  - add min_time_between to limit number of requests
+#                                                          - add min_time_between to limit number of requests
+# 2017/06/02 - 3.1 - GrosBedo - add always_loud setting to display translation to every players
 
 __author__ = 'GrosBedo'
-__version__ = '3.0'
+__version__ = '3.1'
 
 import b3
 import b3.plugin
@@ -90,6 +91,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
         'translator_name': '^7[^1T^7]',
         'min_sentence_length': 6,
         'min_time_between': 30,
+        'always_loud': False,
     }
 
     last_message_said = ''
@@ -170,6 +172,17 @@ class TranslatorPlugin(b3.plugin.Plugin):
             self.error('could not load settings/min_time_between config value: %s' % e)
             self.debug('using default value (%s) for settings/min_time_between' %
                        self.settings['min_time_between'])
+
+        try:
+            self.settings['always_loud'] = self.config.getboolean('settings', 'always_loud')
+            self.debug('loaded always_loud setting: %s' % self.settings['always_loud'])
+        except NoOptionError:
+            self.warning('could not find settings/always_loud in config file, '
+                         'using default: %s' % self.settings['always_loud'])
+        except ValueError, e:
+            self.error('could not load settings/always_loud config value: %s' % e)
+            self.debug('using default value (%s) for settings/always_loud' %
+                       self.settings['always_loud'])
 
     def onStartup(self):
         """
@@ -388,11 +401,18 @@ class TranslatorPlugin(b3.plugin.Plugin):
         if self.settings['display_translator_name']:
             message = '%s %s' % (self.settings['translator_name'], message)
 
-        if not cmd:
-            client.message(message)
-            return
+        # display the translated message
+        if self.settings['always_loud']:
+            # Loudly
+            self.console.say(message)
+        else:
+            # Only to the player that asked for translation
+            if not cmd:
+                client.message(message)
+                return
 
-        cmd.sayLoudOrPM(client, message)
+            # Or let's decide depending on the prefix
+            cmd.sayLoudOrPM(client, message)
 
     ####################################################################################################################
     ##                                                                                                                ##
