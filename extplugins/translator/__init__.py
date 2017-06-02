@@ -30,6 +30,7 @@
 # 2017/05/31 - 3.0 - GrosBedo & Lotabout - new interface to google via web scraping
 #                                                          - add min_time_between to limit number of requests
 # 2017/06/02 - 3.1 - GrosBedo - add always_loud setting to display translation to every players
+# 2017/06/02 - 3.2 - GrosBedo - add exclude_language setting to skip messages in a given language from !translast
 
 __author__ = 'GrosBedo'
 __version__ = '3.1'
@@ -43,13 +44,19 @@ import b3.events
 
 try:
     from urllib import urlencode
-except:
+except ImportError:
     from urllib.parse import urlencode
 
 try:
     import urllib2
-except:
+except ImportError:
     import urllib.request as urllib2
+
+try:
+    # only necessary if using exclude_language setting
+    import langdetect
+except ImportError:
+    pass
 
 import json
 import re
@@ -92,9 +99,11 @@ class TranslatorPlugin(b3.plugin.Plugin):
         'min_sentence_length': 6,
         'min_time_between': 30,
         'always_loud': False,
+        'max_history': 10,
+        'exclude_language': 'en',
     }
 
-    last_message_said = ''
+    last_message_said = []
 
     # available languages
     languages = {
@@ -132,6 +141,18 @@ class TranslatorPlugin(b3.plugin.Plugin):
         except NoOptionError:
             self.warning('could not find settings/default_target_language in config file, '
                          'using default: %s' % self.settings['default_target_language'])
+
+        try:
+            value = self.config.get('settings', 'exclude_language')
+            if value in self.languages.keys():
+                self.settings['exclude_language'] = value
+                self.debug('loaded exclude_language setting: %s' % self.settings['exclude_language'])
+            else:
+                self.warning('invalid value speficied in settings/exclude_language (%s), '
+                             'using default: %s' % (value, self.settings['exclude_language']))
+        except NoOptionError:
+            self.warning('could not find settings/exclude_language in config file, '
+                         'using default: %s' % self.settings['exclude_language'])
 
         try:
             self.settings['display_translator_name'] = self.config.getboolean('settings', 'display_translator_name')
@@ -338,7 +359,10 @@ class TranslatorPlugin(b3.plugin.Plugin):
         if message[0] not in self.cmdPrefix:
 
             # save for future use
-            self.last_message_said = message
+            self.last_message_said.append(message)
+            # remove old messages
+            if len(self.last_message) > self.settings['max_history']:
+                self.last_message.pop(0)
 
             # we have now to send a translation to all the
             # clients that enabled the automatic translation
@@ -475,7 +499,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
         [<target>] - translate the last available sentence from the chat
         """
         if not self.last_message_said:
-            client.message('^7unable to translate')
+            client.message('^7unable to translate, no last message found')
             return
 
         # set default target language
@@ -490,7 +514,24 @@ class TranslatorPlugin(b3.plugin.Plugin):
             # use the provided language code
             tar = data
 
-        message = self.translate(self.last_message_said, to_lang=tar)
+        # exclude last messages with language we know well
+        excl_lang = self.settings['exclude_language']
+        if excl_lang:
+            for msg in last_message_said[::-1]:
+                # keep this message as the one to translate
+                last_msg = msg
+                # Detect language: if not an excluded language, we break and keep this message
+                try:
+                    if langdetect.detect(msg) != excl_lang:
+                        break
+                except Exception as exc:
+                    break
+        else:
+            # else, just pick the last message in the list
+            last_msg = last_message_said[-1]
+
+        # translate
+        message = self.translate(self.last_msg, to_lang=tar)
         if not message:
             client.message('^7unable to translate')
             return
