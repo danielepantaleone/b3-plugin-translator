@@ -33,7 +33,7 @@
 # 2017/06/02 - 3.2 - GrosBedo - add exclude_language setting to skip messages in a given language from !translast
 
 __author__ = 'GrosBedo'
-__version__ = '3.1'
+__version__ = '3.2'
 
 import b3
 import b3.plugin
@@ -517,7 +517,7 @@ class TranslatorPlugin(b3.plugin.Plugin):
         # exclude last messages with language we know well
         excl_lang = self.settings['exclude_language']
         if excl_lang:
-            for msg in last_message_said[::-1]:
+            for msg in self.last_message_said[::-1]:
                 # keep this message as the one to translate
                 last_msg = msg
                 # Detect language: if not an excluded language, we break and keep this message
@@ -528,10 +528,10 @@ class TranslatorPlugin(b3.plugin.Plugin):
                     break
         else:
             # else, just pick the last message in the list
-            last_msg = last_message_said[-1]
+            last_msg = self.last_message_said[-1]
 
         # translate
-        message = self.translate(self.last_msg, to_lang=tar)
+        message = self.translate(last_msg, to_lang=tar)
         if not message:
             client.message('^7unable to translate')
             return
