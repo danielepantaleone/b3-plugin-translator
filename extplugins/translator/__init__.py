@@ -32,7 +32,7 @@
 # 2017/06/02 - 3.1 - GrosBedo - add always_loud setting to display translation to every players
 # 2017/06/02 - 3.2 - GrosBedo - add exclude_language setting to skip messages in a given language from !translast
 
-__author__ = 'GrosBedo'
+__author__ = 'Fenix'
 __version__ = '3.2'
 
 import b3
